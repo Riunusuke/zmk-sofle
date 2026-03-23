@@ -76,19 +76,19 @@
         macro_l1: macro_l1 {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &mo 1 &kp F23>, <&macro_tap &rgb_ug RGB_COLOR_HSB(0,100,50)>, <&macro_pause_for_release>, <&macro_release &mo 1 &kp F23>, <&macro_tap &rgb_ug RGB_COLOR_HSB(160,100,50)>;
+            bindings = <&macro_press &mo 1>, <&macro_tap &rgb_ug RGB_COLOR_HSB(0,100,50)>, <&macro_pause_for_release>, <&macro_release &mo 1>, <&macro_tap &rgb_ug RGB_COLOR_HSB(160,100,50)>;
         };
 
         macro_l2: macro_l2 {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &mo 2 &kp F22>, <&macro_tap &rgb_ug RGB_COLOR_HSB(120,100,50)>, <&macro_pause_for_release>, <&macro_release &mo 2 &kp F22>, <&macro_tap &rgb_ug RGB_COLOR_HSB(160,100,50)>;
+            bindings = <&macro_press &mo 2>, <&macro_tap &rgb_ug RGB_COLOR_HSB(120,100,50)>, <&macro_pause_for_release>, <&macro_release &mo 2>, <&macro_tap &rgb_ug RGB_COLOR_HSB(160,100,50)>;
         };
 
         macro_l4: macro_l4 {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_press &mo 4 &kp F21>, <&macro_tap &rgb_ug RGB_COLOR_HSB(280,100,50)>, <&macro_pause_for_release>, <&macro_release &mo 4 &kp F21>, <&macro_tap &rgb_ug RGB_COLOR_HSB(160,100,50)>;
+            bindings = <&macro_press &mo 4>, <&macro_tap &rgb_ug RGB_COLOR_HSB(280,100,50)>, <&macro_pause_for_release>, <&macro_release &mo 4>, <&macro_tap &rgb_ug RGB_COLOR_HSB(160,100,50)>;
         };
     };
 
