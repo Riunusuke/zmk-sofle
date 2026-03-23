@@ -127,7 +127,7 @@ layers:
   - $$mdi:volume-off$$
   - Ctl+T
   - Ctl+W
-  - {t: '$$mdi:transfer$$', type: trans}
+  - '&macro_l2'
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   layer2:
