@@ -5,7 +5,7 @@
 #include <zmk/usb/usb.h>
 #include <zmk/hid.h>
 #include <zmk/endpoints.h>
-#include <zmk/raw_hid.h>
+#include <zmk-raw-hid/raw_hid.h>
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
