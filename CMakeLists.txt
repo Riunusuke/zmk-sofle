@@ -1,0 +1,5 @@
+if(CONFIG_ZMK_COM)
+  zephyr_library()
+  zephyr_library_sources(src/zmk_com.c)
+  zephyr_library_include_directories(include)
+endif()

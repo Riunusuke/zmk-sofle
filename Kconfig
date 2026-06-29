@@ -1,0 +1,7 @@
+menuconfig ZMK_COM
+	bool "Enable zmk-com companion communication"
+	default n
+	depends on RAW_HID && ZMK_RGB_UNDERGLOW
+	help
+	  Enables the in-repo companion transport module that publishes active
+	  layer reports and accepts RGB underglow commands over Raw HID.
