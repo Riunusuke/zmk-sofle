@@ -6,5 +6,6 @@ tools/
 desktop/.venv/
 desktop/__pycache__/
 desktop/*.pyc
+desktop/.zmk-com-settings.json
 __pycache__/
 *.py[cod]
