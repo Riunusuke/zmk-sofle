@@ -3,3 +3,8 @@ zmk/
 modules/
 tools/
 .west/
+desktop/.venv/
+desktop/__pycache__/
+desktop/*.pyc
+__pycache__/
+*.py[cod]
