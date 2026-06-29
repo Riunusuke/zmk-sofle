@@ -171,13 +171,19 @@ class CompanionApp:
                 "Effect",
                 pystray.Menu(
                     *[
-                        pystray.MenuItem(name, lambda icon, item, effect=index: self.send_effect(effect))
+                        pystray.MenuItem(name, self._effect_menu_handler(index))
                         for index, name in EFFECT_NAMES.items()
                     ]
                 ),
             ),
             pystray.MenuItem("Quit", self.quit),
         )
+
+    def _effect_menu_handler(self, effect: int):
+        def handler(icon: pystray.Icon, item: pystray.MenuItem) -> None:
+            self.send_effect(effect)
+
+        return handler
 
     @staticmethod
     def _build_icon() -> Image.Image:

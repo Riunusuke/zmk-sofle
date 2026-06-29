@@ -1,20 +1,27 @@
 #include <errno.h>
 #include <stdbool.h>
 #include <stdint.h>
+
+#include <drivers/behavior.h>
 #include <raw_hid/events.h>
 
+#include <dt-bindings/zmk/rgb.h>
+#include <zephyr/device.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/sys/byteorder.h>
 #include <zephyr/sys/util.h>
 
+#include <zmk/behavior.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/layer_state_changed.h>
+#include <zmk/events/position_state_changed.h>
 #include <zmk/keymap.h>
-#include <zmk/rgb_underglow.h>
 
 #include <zmk_com/protocol.h>
 
 LOG_MODULE_REGISTER(zmk_com, CONFIG_ZMK_LOG_LEVEL);
+
+#define ZMK_COM_RGB_BEHAVIOR_DEV DEVICE_DT_NAME(DT_INST(0, zmk_behavior_rgb_underglow))
 
 BUILD_ASSERT(CONFIG_RAW_HID_REPORT_SIZE == ZMK_COM_REPORT_SIZE,
              "zmk-com expects 32-byte raw HID reports");
@@ -52,6 +59,24 @@ static int zmk_com_send_layer_state(zmk_keymap_layer_index_t layer) {
         (struct raw_hid_sent_event){.data = data, .length = sizeof(data)});
 }
 
+static int zmk_com_invoke_rgb_behavior(uint32_t param1, uint32_t param2) {
+    struct zmk_behavior_binding binding = {
+        .behavior_dev = ZMK_COM_RGB_BEHAVIOR_DEV,
+        .param1 = param1,
+        .param2 = param2,
+    };
+    struct zmk_behavior_binding_event event = {
+        .layer = zmk_keymap_highest_layer_active(),
+        .position = 0,
+        .timestamp = k_uptime_get(),
+#if IS_ENABLED(CONFIG_ZMK_SPLIT)
+        .source = ZMK_POSITION_STATE_CHANGE_SOURCE_LOCAL,
+#endif
+    };
+
+    return zmk_behavior_invoke_binding(&binding, event, true);
+}
+
 static int zmk_com_apply_rgb_command(const struct zmk_com_rgb_command_payload *payload) {
     uint8_t flags = payload->flags;
 
@@ -70,11 +95,9 @@ static int zmk_com_apply_rgb_command(const struct zmk_com_rgb_command_payload *p
             return -EINVAL;
         }
 
-        int err = zmk_rgb_underglow_set_hsb((struct zmk_led_hsb){
-            .h = hue,
-            .s = ZMK_COM_RGB_SATURATION,
-            .b = payload->brightness,
-        });
+        int err = zmk_com_invoke_rgb_behavior(
+            RGB_COLOR_HSB_CMD,
+            RGB_COLOR_HSB_VAL(hue, ZMK_COM_RGB_SATURATION, payload->brightness));
         if (err) {
             return err;
         }
@@ -85,18 +108,18 @@ static int zmk_com_apply_rgb_command(const struct zmk_com_rgb_command_payload *p
             return -EINVAL;
         }
 
-        int err = zmk_rgb_underglow_select_effect(payload->effect);
+        int err = zmk_com_invoke_rgb_behavior(RGB_EFS_CMD, payload->effect);
         if (err) {
             return err;
         }
     }
 
     if ((flags & ZMK_COM_RGB_FLAG_TURN_OFF) != 0U) {
-        return zmk_rgb_underglow_off();
+        return zmk_com_invoke_rgb_behavior(RGB_OFF_CMD, 0);
     }
 
     if ((flags & ZMK_COM_RGB_FLAG_TURN_ON) != 0U) {
-        return zmk_rgb_underglow_on();
+        return zmk_com_invoke_rgb_behavior(RGB_ON_CMD, 0);
     }
 
     return 0;
